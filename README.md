@@ -1,13 +1,13 @@
-# Carta_prob_dist_varie.Rmd
+## Carta_prob_dist_varie.Rmd
 Gumbel, Normal and Lognormal ditribution Probabilty charts made by R
 
-# Dist_Prob_Borgo.xls
+## Dist_Prob_Borgo.xls
 Data manipulation to find the Cumulate Frequency of the sample and the distribution parameters. 
 
-# CPPluvio
+## CPPluvio
 Pluviometric possibility curve.
 
-# credits
+## Credits
 Author: Francesco Ottaviani
 
 University: UniPD
