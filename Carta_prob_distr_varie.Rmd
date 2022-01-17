@@ -1,0 +1,161 @@
+---
+title: "Carte probabilistiche distr. probabilita"
+output: pdf_document
+---
+Librerire
+```{r}
+library(ggplot2)
+library(ggforce)
+library(hrbrthemes)
+library(evd)
+```
+
+Carico i dati
+
+```{r}
+data <- read.delim("~/Geologia applicata alla difesa del suolo e dell'ambiente/Elementi di Idrologia e Idraulica/II-MaterialeRelTecIdrologia2021-2022/3gg.txt", comment.char="#")
+data
+```
+
+
+CARTA PROB DIST NORM
+```{r}
+P = c(0.005,0.010,0.020,0.030,0.040,0.050,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,0.95,0.96,0.97,0.98,0.99,0.995)
+lbls = c("0.005","0.010","0.020","0.030","0.040","0.050","0.100","0.200","0.300","0.400","0.500","0.600","0.700","0.800","0.900","0.950","0.960","0.970","0.980","0.990","0.995")
+b = qnorm(P)
+edl = max(data$mm)+40
+lng = length(data$mm)
+
+ggplot() +
+  geom_point(data= data, aes(x = mm, y = qnorm(f.x.)))+
+  geom_segment(aes(x = data$mm[1], xend= data$mm[lng], y = qnorm(data$f.x.[1]) , yend = qnorm(data$f.x.[lng])), col='blue')+
+  xlab("h [mm]") +
+  ylab("u") +
+  ggtitle("Carta probabilistica della distribuzione di probabilità NORMALE\n",)+
+  scale_x_continuous(expand = c(0, 0), limits = c(0, edl)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(-3, +3)) +
+  geom_segment(aes(x=0, y=qnorm(0.995), xend=edl),yend=qnorm(0.995), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qnorm(0.990), xend=edl),yend=qnorm(0.990), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qnorm(0.980), xend=edl),yend=qnorm(0.980), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qnorm(0.970), xend=edl),yend=qnorm(0.970), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qnorm(0.960), xend=edl),yend=qnorm(0.960), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qnorm(0.950), xend=edl),yend=qnorm(0.950), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qnorm(0.900), xend=edl),yend=qnorm(0.900), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qnorm(0.800), xend=edl),yend=qnorm(0.800), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qnorm(0.700), xend=edl),yend=qnorm(0.700), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qnorm(0.600), xend=edl),yend=qnorm(0.600), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qnorm(0.500), xend=edl),yend=qnorm(0.500), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qnorm(0.400), xend=edl),yend=qnorm(0.400), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qnorm(0.300), xend=edl),yend=qnorm(0.300), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qnorm(0.200), xend=edl),yend=qnorm(0.200), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qnorm(0.100), xend=edl),yend=qnorm(0.100), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qnorm(0.050), xend=edl),yend=qnorm(0.050), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qnorm(0.040), xend=edl),yend=qnorm(0.040), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qnorm(0.030), xend=edl),yend=qnorm(0.030), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qnorm(0.020), xend=edl),yend=qnorm(0.020), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qnorm(0.010), xend=edl),yend=qnorm(0.010), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qnorm(0.005), xend=edl),yend=qnorm(0.005), size = 0.1, text ="segment")+
+  scale_y_continuous(sec.axis = sec_axis(~ .*1, breaks = b, labels= lbls, name = "P(x)\n"))+
+  theme_classic()+
+  theme(axis.text.y.right = element_text(size = 6), axis.title.y.right = element_text(size = 12), plot.title = element_text(size = 12, hjust = 0.5),panel.background = element_rect(colour = "black", fill=NA, size=1))
+
+```
+
+
+CARTA PROB DIST GUMBEL
+```{r}
+P = c(0.001, 0.010,0.050,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,0.95,0.96,0.97,0.98,0.99,0.995, 0.999)
+lbls = c("0.001", "0.010","0.050","0.100","0.200","0.300","0.400","0.500","0.600","0.700","0.800","0.900","0.950","0.960","0.970","0.980","0.990","0.995", "0.999")
+b = qgumbel(P)
+edl = max(data$mm)+40
+lng = length(data$mm)
+
+#Regressione Lineare sulla ditribuzioni di Probabilità Lognormale
+model <- lm(qgumbel(data$f.x.) ~ data$mm)
+yp = predict.lm(model)
+#model
+
+ggplot() +
+  geom_point(data= data, aes(x = mm, y = qgumbel(f.x.)))+
+  #geom_point(data= data, aes(x = mm, y = yp), col = 'red')+
+  geom_segment(aes(x = data$mm[1], xend= data$mm[lng], y = qgumbel(data$f.x.[1]) , yend = qgumbel(data$f.x.[lng])), col='blue')+
+  xlab("h [mm]")+
+  ylab("y\n")+
+  ggtitle("Carta probabilistica della distribuzione di probabilità di GUMBEL\n",)+
+  scale_x_continuous(expand = c(0, 0), limits = c(0, edl))+
+  scale_y_continuous(expand = c(0, 0), limits = c(-2, +7.5))+
+  geom_segment(aes(x=0, y=qgumbel(0.999), xend=edl),yend=qgumbel(0.999), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qgumbel(0.995), xend=edl),yend=qgumbel(0.995), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qgumbel(0.990), xend=edl),yend=qgumbel(0.990), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qgumbel(0.980), xend=edl),yend=qgumbel(0.980), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qgumbel(0.970), xend=edl),yend=qgumbel(0.970), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qgumbel(0.960), xend=edl),yend=qgumbel(0.960), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qgumbel(0.950), xend=edl),yend=qgumbel(0.950), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qgumbel(0.900), xend=edl),yend=qgumbel(0.900), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qgumbel(0.800), xend=edl),yend=qgumbel(0.800), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qgumbel(0.700), xend=edl),yend=qgumbel(0.700), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qgumbel(0.600), xend=edl),yend=qgumbel(0.600), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qgumbel(0.500), xend=edl),yend=qgumbel(0.500), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qgumbel(0.400), xend=edl),yend=qgumbel(0.400), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qgumbel(0.300), xend=edl),yend=qgumbel(0.300), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qgumbel(0.200), xend=edl),yend=qgumbel(0.200), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qgumbel(0.100), xend=edl),yend=qgumbel(0.100), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qgumbel(0.050), xend=edl),yend=qgumbel(0.050), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qgumbel(0.010), xend=edl),yend=qgumbel(0.010), size = 0.1, text ="segment")+
+  geom_segment(aes(x=0, y=qgumbel(0.001), xend=edl),yend=qgumbel(0.001), size = 0.1, text ="segment")+
+  scale_y_continuous(sec.axis = sec_axis(~ .*1, breaks = b, labels= lbls, name = "P(y)\n"))+
+  theme_classic()+
+  theme(axis.text.y.right = element_text(size = 6), axis.title.y.right = element_text(size = 12), plot.title = element_text(size = 12, hjust = 0.5), panel.border = element_rect(colour = "black", fill=NA, size=1))
+
+```
+
+
+CARTA PROB DIST LOGNORM
+```{r}
+P = c(0.005,0.010,0.020,0.030,0.040,0.050,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,0.95,0.96,0.97,0.98,0.99,0.995)
+lbls = c("0.005","0.010","0.020","0.030","0.040","0.050","0.100","0.200","0.300","0.400","0.500","0.600","0.700","0.800","0.900","0.950","0.960","0.970","0.980","0.990","0.995")
+b = qnorm(P)
+edl = max(log(data$mm)) + 0.2
+stl = min(log(data$mm)) - 0.2
+lng = length(data$mm)
+
+#Regressione Lineare sulla ditribuzioni di Probabilità Lognormale
+model <- lm(qnorm(data$f.x.) ~ data$mm)
+yp = predict.lm(model)
+
+ggplot() +
+  geom_point(data= data, aes(x = log(mm), y = qnorm(f.x.)))+
+  #geom_point(data= data, aes(x = log(mm), y = yp), col = 'red')+
+  geom_segment(aes(x = log(data$mm[1]), xend= log(data$mm[lng]), y = qnorm(data$f.x.[1]) , yend = qnorm(data$f.x.[lng])), col='blue')+
+  xlab("h [mm]") +
+  ylab("u") +
+  ggtitle("Carta probabilistica della distribuzione di probabilità LOGNORMALE\n",)+
+  scale_x_continuous(expand = c(0, 0), limits = c(stl, edl)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(-3, +3)) +
+  #geom_segment(aes(x=stl, y=qnorm(1), xend=edl),yend=qlnorm(1), size = 0.1, text ="segment")+
+  geom_segment(aes(x=stl, y=qnorm(0.995), xend=edl),yend=qnorm(0.995), size = 0.1, text ="segment")+
+  geom_segment(aes(x=stl, y=qnorm(0.990), xend=edl),yend=qnorm(0.990), size = 0.1, text ="segment")+
+  geom_segment(aes(x=stl, y=qnorm(0.980), xend=edl),yend=qnorm(0.980), size = 0.1, text ="segment")+
+  geom_segment(aes(x=stl, y=qnorm(0.970), xend=edl),yend=qnorm(0.970), size = 0.1, text ="segment")+
+  geom_segment(aes(x=stl, y=qnorm(0.960), xend=edl),yend=qnorm(0.960), size = 0.1, text ="segment")+
+  geom_segment(aes(x=stl, y=qnorm(0.950), xend=edl),yend=qnorm(0.950), size = 0.1, text ="segment")+
+  geom_segment(aes(x=stl, y=qnorm(0.900), xend=edl),yend=qnorm(0.900), size = 0.1, text ="segment")+
+  geom_segment(aes(x=stl, y=qnorm(0.800), xend=edl),yend=qnorm(0.800), size = 0.1, text ="segment")+
+  geom_segment(aes(x=stl, y=qnorm(0.700), xend=edl),yend=qnorm(0.700), size = 0.1, text ="segment")+
+  geom_segment(aes(x=stl, y=qnorm(0.600), xend=edl),yend=qnorm(0.600), size = 0.1, text ="segment")+
+  geom_segment(aes(x=stl, y=qnorm(0.500), xend=edl),yend=qnorm(0.500), size = 0.1, text ="segment")+
+  geom_segment(aes(x=stl, y=qnorm(0.400), xend=edl),yend=qnorm(0.400), size = 0.1, text ="segment")+
+  geom_segment(aes(x=stl, y=qnorm(0.300), xend=edl),yend=qnorm(0.300), size = 0.1, text ="segment")+
+  geom_segment(aes(x=stl, y=qnorm(0.200), xend=edl),yend=qnorm(0.200), size = 0.1, text ="segment")+
+  geom_segment(aes(x=stl, y=qnorm(0.100), xend=edl),yend=qnorm(0.100), size = 0.1, text ="segment")+
+  geom_segment(aes(x=stl, y=qnorm(0.050), xend=edl),yend=qnorm(0.050), size = 0.1, text ="segment")+
+  geom_segment(aes(x=stl, y=qnorm(0.040), xend=edl),yend=qnorm(0.040), size = 0.1, text ="segment")+
+  geom_segment(aes(x=stl, y=qnorm(0.030), xend=edl),yend=qnorm(0.030), size = 0.1, text ="segment")+
+  geom_segment(aes(x=stl, y=qnorm(0.020), xend=edl),yend=qnorm(0.020), size = 0.1, text ="segment")+
+  geom_segment(aes(x=stl, y=qnorm(0.010), xend=edl),yend=qnorm(0.010), size = 0.1, text ="segment")+
+  geom_segment(aes(x=stl, y=qnorm(0.005), xend=edl),yend=qnorm(0.005), size = 0.1, text ="segment")+
+  scale_y_continuous(sec.axis = sec_axis(~ .*1, breaks = b, labels= lbls, name = "P(x)\n"))+
+  theme_classic()+
+  theme(axis.text.y.right = element_text(size = 6), axis.title.y.right = element_text(size = 12), plot.title = element_text(size = 12, hjust = 0.5), panel.border = element_rect(colour = "black", fill=NA, size=1))
+
+```
