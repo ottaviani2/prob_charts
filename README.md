@@ -18,4 +18,6 @@ Master Degree: Geology applied to enviroment and soil defense
 
 Course: Idrologia e Idraulica
 
-Prof: Paolo Scotton
+Course Prof: Paolo Scotton
+
+Thanks to: Prof. Luca Lanci, UniURB, for the help to understend how R work with the Normal Distribution
