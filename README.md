@@ -6,7 +6,7 @@ Gumbel, Normal and Lognormal ditribution Probabilty charts made by R
 Pluviometric possibility curve.
 
 ### Dist_Prob_Borgo.xls
-Data manipulation to find the Cumulate Frequency of the sample and the distribution parameters. 
+Data manipulation to find the Cumulate Frequency of the sample, the distributions parameters estimation, the Pearson Test for the different parameter estimation. 
 
 ### PioggeBorgoMeteoTrentinoScrosciHHGG_ver2.xls
 Row data provided by Borgo Valsugana pluviometer.
