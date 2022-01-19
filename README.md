@@ -24,4 +24,4 @@ Course: Idrologia e Idraulica
 
 Course Prof: Paolo Scotton
 
-Thanks to: Prof. Luca Lanci, UniURB, for the help to understend how R work with the Normal Distribution
+Thanks to: Prof. Luca Lanci, UniURB, for the help to understand how R work with the Normal Distribution
